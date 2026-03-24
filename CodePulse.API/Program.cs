@@ -1,5 +1,7 @@
 
 using CodePulse.API.Data;
+using CodePulse.API.Repositories.Implementation;
+using CodePulse.API.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
 
 namespace CodePulse.API
@@ -21,6 +23,8 @@ namespace CodePulse.API
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("CodePulseConnectionString"));
             });
+
+            builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
