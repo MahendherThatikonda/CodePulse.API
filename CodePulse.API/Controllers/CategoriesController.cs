@@ -1,6 +1,7 @@
 ﻿using CodePulse.API.Data;
 using CodePulse.API.Models.Domain;
 using CodePulse.API.Models.DTO;
+using CodePulse.API.Repositories.Implementation;
 using CodePulse.API.Repositories.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -62,5 +63,44 @@ namespace CodePulse.API.Controllers
 
             return Ok(response);
         }
+
+
+        // Get Edit ID
+        [HttpGet("{Id:guid}")]
+        public async Task<IActionResult> GetCategoryById([FromRoute(Name = "Id")] Guid Id)
+        {
+          var existingcategory=  await categoryRepository.GetById(Id);
+
+            if(existingcategory is null)
+            {
+                return NotFound();
+            }
+
+            var response = new CategoryDto
+            {
+                Id = existingcategory.Id,
+                Name = existingcategory.Name,
+                UrlHandle = existingcategory.UrlHandle
+
+            };
+
+            return Ok(response);
+        }
+
+        //[HttpPut]
+        //    [Route("{Id:guid}")]
+        //public async Task<IActionResult> EditCategory([FromRoute(Name = "Id")] Guid Id,UpdateCategoryRequestDTO request)
+        //{
+        //    var category = new Category
+        //    {
+        //        Id = Id,
+        //        Name = request.Name,
+        //        UrlHandle = request.UrlHandle
+        //    }
+        //}
+
+
+
+
     }
 }
