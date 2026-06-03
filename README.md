@@ -26,3 +26,4 @@ seamlessly with an Angular frontend for a complete full-stack application.
 | Architecture | RESTful API, Dependency Injection |
 | Frontend (paired) | Angular v20 |
 | IDE | Visual Studio |
+## Keywords: Web App
