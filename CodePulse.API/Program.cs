@@ -3,6 +3,7 @@ using CodePulse.API.Data;
 using CodePulse.API.Repositories.Implementation;
 using CodePulse.API.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 
 namespace CodePulse.API
 {
@@ -15,6 +16,7 @@ namespace CodePulse.API
             // Add services to the container.
 
             builder.Services.AddControllers();
+            builder.Services.AddHttpContextAccessor();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             //builder.Services.AddOpenApi();
             builder.Services.AddEndpointsApiExplorer();
@@ -26,6 +28,8 @@ namespace CodePulse.API
 
             builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
             builder.Services.AddScoped<IBlogPostRepository, BlogPostRepository>();
+            builder.Services.AddScoped<IImageRepository, ImageRepository>();
+            
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -48,6 +52,11 @@ namespace CodePulse.API
 
             app.UseAuthorization();
 
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider=new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(),"Images")),
+                RequestPath="/Images"
+            });
 
             app.MapControllers();
 
