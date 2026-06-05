@@ -15,24 +15,46 @@ namespace CodePulse.API.Controllers
         {
             this.imageRepository = imageRespository;
         }
+        //GET : {apiBaseURL}/api/Images
+        [HttpGet]
+        public async Task<IActionResult> GetAllImages()
+        {
+           var images= await imageRepository.GetAll();
+            //Convert this domain model to DTO
+            var response = new List<BlogImageDto>();
+            foreach(var image in images)
+            {
+                response.Add(new BlogImageDto
+                {
+                    Id = image.Id,
+                    Title = image.Title,
+                    DateCreated = image.DateCreated,
+                    FileExtension = image.FileExtension,
+                    FileName = image.FileName,
+                    Url = image.Url,
+                });
+            }
+
+            return Ok(response);
+        }
+
         //postaction method
         //POST:{APIBASEURL/API/IMAGES}
         [HttpPost]
-        public async Task<IActionResult> UploadImage([FromForm] IFormFile file,
-            [FromForm] string fileName, [FromForm] string title)
+        public async Task<IActionResult> UploadImage([FromForm] UploadImageRequestDto request)
         {
-            ValidateFileUpload(file);
+            ValidateFileUpload(request.File);
             if (ModelState.IsValid)
             {
                 var blogImage = new BlogImage
                 {
-                    FileExtension = Path.GetExtension(file.FileName).ToLower(),
-                    FileName = fileName,
-                    Title = title,
+                    FileExtension = Path.GetExtension(request.File.FileName).ToLower(),
+                    FileName = request.FileName,
+                    Title = request.Title,
                     DateCreated = DateTime.Now,
                 }; 
 
-                blogImage = await imageRepository.Upload(file, blogImage);
+                blogImage = await imageRepository.Upload(request.File, blogImage);
 
                 //convert domain model to Dto
                 var response = new BlogImageDto
@@ -56,7 +78,7 @@ namespace CodePulse.API.Controllers
                 ".jpg",".jpeg",".png"
             };
 
-            if (allowedExtensions.Contains(Path.GetExtension(file.FileName).ToLower()))
+            if (!allowedExtensions.Contains(Path.GetExtension(file.FileName).ToLower()))
             {
                 ModelState.AddModelError("file", "Unsupported File Format");
             }
