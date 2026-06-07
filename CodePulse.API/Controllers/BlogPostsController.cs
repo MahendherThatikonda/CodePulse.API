@@ -1,4 +1,4 @@
-﻿using Azure.Core;
+using Azure.Core;
 using CodePulse.API.Models.Domain;
 using CodePulse.API.Models.DTO;
 using CodePulse.API.Repositories.Implementation;
@@ -73,6 +73,41 @@ namespace CodePulse.API.Controllers
         public async Task<IActionResult> GetBlogPostById([FromRoute]  Guid id)
         {
           var blogPost = await blogPostRepository.GetByIdAsync(id);
+            if (blogPost is null)
+            {
+                return NotFound();
+            }
+
+            var response = new BlogPostDto
+            {
+                Id = blogPost.Id,
+                Author = blogPost.Author,
+                Content = blogPost.Content,
+                FeaturedImageUrl = blogPost.FeaturedImageUrl,
+                IsVisible = blogPost.IsVisible,
+                PublishedDate = blogPost.PublishedDate,
+                ShortDescription = blogPost.ShortDescription,
+                Title = blogPost.Title,
+                UrlHandle = blogPost.UrlHandle,
+                Categories = blogPost.Categories.Select(x => new CategoryDto
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    UrlHandle = x.UrlHandle,
+                }).ToList()
+            };
+            return Ok(response);
+        }
+
+
+
+        //get:{apiBaseUrl}/api/blogPosts/{urlHandle}
+        [HttpGet]
+        [Route("{urlHandle}")]
+        public async Task<IActionResult> GetBlogPostByUrlHandle([FromRoute] string urlHandle)
+        {
+            //Get BlogPost details by repository
+            var blogPost = await blogPostRepository.GetByUrlHandleAsync(urlHandle);
             if (blogPost is null)
             {
                 return NotFound();
