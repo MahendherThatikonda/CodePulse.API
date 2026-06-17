@@ -61,7 +61,7 @@ namespace CodePulse.API.Data
         new()
         {
           UserId=adminUserId,
-          RoleId=readerRoleId,
+          RoleId=writerRoleId,
         }
 
       };
