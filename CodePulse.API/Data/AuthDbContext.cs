@@ -23,50 +23,50 @@ namespace CodePulse.API.Data
         {
           Id=readerRoleId,
           Name="Reader",
-          NormalizedName="Reader".ToUpper(),
+          NormalizedName="READER",
           ConcurrencyStamp=readerRoleId,
         },
         new IdentityRole()
         {
           Id =writerRoleId,
           Name="writer",
-          NormalizedName="writer".ToUpper(),
+          NormalizedName="WRITER",
           ConcurrencyStamp=writerRoleId,
         }
       };
          //seed the roles
          builder.Entity<IdentityRole>().HasData(roles);
-      var adminUserId = "5fe58d0f-e37c-44a5-8130-30c948094726";
-      //Create an Admin User
-      var admin = new IdentityUser()
-      {
-        Id=adminUserId,
-        UserName="admin@codepulse.com",
-        Email="admin@codepulse.com",
-        NormalizedEmail="admin@codepulse.com".ToUpper(),
-        NormalizedUserName="admin@codepulse.com".ToUpper(),
-      };
+      //var adminUserId = "5fe58d0f-e37c-44a5-8130-30c948094726";
+      ////Create an Admin User
+      //var admin = new IdentityUser()
+      //{
+      //  Id=adminUserId,
+      //  UserName="admin@codepulse.com",
+      //  Email="admin@codepulse.com",
+      //  NormalizedEmail="ADMIN@CODEPULSE.COM",
+      //  NormalizedUserName= "ADMIN@CODEPULSE.COM",
+      //};
 
-      admin.PasswordHash = new PasswordHasher<IdentityUser>().HashPassword(admin, "Admin@123");
+//      admin.PasswordHash = new PasswordHasher<IdentityUser>().HashPassword(admin, "Admin@123");
          
-      builder.Entity<IdentityUser>().HasData(admin);
-      //Give roles to admin
-      var adminRoles = new List<IdentityUserRole<string>>()
-      {
-        new()
-        {
-          UserId=adminUserId,
-          RoleId=readerRoleId,
-        },
-        new()
-        {
-          UserId=adminUserId,
-          RoleId=writerRoleId,
-        }
+      //builder.Entity<IdentityUser>().HasData(admin);
+      ////Give roles to admin
+      //var adminRoles = new List<IdentityUserRole<string>>()
+      //{
+      //  new()
+      //  {
+      //    UserId=adminUserId,
+      //    RoleId=readerRoleId,
+      //  },
+      //  new()
+      //  {
+      //    UserId=adminUserId,
+      //    RoleId=writerRoleId,
+      //  }
 
-      };
+      //};
 
-      builder.Entity<IdentityUserRole<string>>().HasData(adminRoles);
+      //builder.Entity<IdentityUserRole<string>>().HasData(adminRoles);
     }
   }
 }
