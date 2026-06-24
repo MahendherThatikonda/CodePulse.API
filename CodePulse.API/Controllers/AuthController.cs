@@ -41,7 +41,7 @@ namespace CodePulse.API.Controllers
           {
             Email = request.Email,
             Roles = roles.ToList(),
-            Token = jwtToken
+ //           Token = jwtToken
           };
           //create a token
           return Ok(response);
