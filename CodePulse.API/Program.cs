@@ -69,6 +69,19 @@ namespace CodePulse.API
             ValidAudience = builder.Configuration["Jwt:Audience"],
             IssuerSigningKey=new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
           };
+
+          options.Events = new JwtBearerEvents
+          {
+            OnMessageReceived = context =>
+            {
+              if (context.Request.Cookies.TryGetValue("access_token",out var token))
+              {
+                context.Token = token;
+              };
+
+              return Task.CompletedTask;
+            }
+          };
         });
       var app = builder.Build();
 
@@ -85,8 +98,9 @@ namespace CodePulse.API
       app.UseCors(options =>
       {
         options.AllowAnyMethod();
-        options.AllowAnyHeader();
+        options.WithOrigins("http://localhost:4200");
         options.AllowAnyOrigin();
+        options.AllowCredentials();
 
       });
 
